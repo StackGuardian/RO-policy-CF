@@ -46,3 +46,7 @@ Outputs:
       Fn::GetAtt:
         - StackGuardianIntegrationRole
         - Arn
+  
+  ExternalIDOutput:
+    Description: The External ID
+    Value: !Ref ExternalIDParam
