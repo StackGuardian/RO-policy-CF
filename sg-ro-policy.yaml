@@ -1,22 +1,36 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: CloudFormation template for creating an IAM role with ReadOnlyAccess policy
 
+Parameters:
+  RoleNameParam:
+    Type: String
+    Description: The name of the IAM role
+    Default: SGIntegrationRole
+  
+  ExternalIDParam:
+    Type: String
+    Description: The external ID for the assume role policy
+    Default: StackGurdianRO:874631698613
+
+
 Resources:
   StackGuardianIntegrationRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: StackGuardianIntegrationRole
+      RoleName: !Ref RoleNameParam
       Description: IAM role for StackGuardian integration
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
-              AWS: "476299211833"
+              AWS:
+                - "arn:aws:iam::476299211833:root"
+                - "arn:aws:iam::163602625436:root"
             Action: sts:AssumeRole
             Condition:
               StringEquals:
-                sts:ExternalId: "StackGurdianRO"
+                sts:ExternalId: !Ref ExternalIDParam
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
       Tags:
